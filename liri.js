@@ -1,5 +1,9 @@
 // the ./ tells JS to look in the current folder for the file.
 var keys = require('./keys.js');
+
+// fs is a core Node package for reading and writing files
+var fs = require("fs");
+
 // console.log(keys);
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
@@ -35,7 +39,7 @@ var getMeSpotify = function(songName) {
           console.log('Error occurred: ' + err);
           return;
       }
-      console.log(data);
+      // console.log(data);
       // console.log(data.tracks.items[0]);
       var songs = data.tracks.items;
       for(var i=0; i<songs.length; i++){
@@ -44,7 +48,7 @@ var getMeSpotify = function(songName) {
         console.log('song name: ' + songs[i].name);
         console.log('preview song: ' + songs[i].preview_url);
         console.log('album ' + songs[i].album.name);
-        console.log('##################################################');
+        console.log('\n##################################################\n');
       }
   });
 };

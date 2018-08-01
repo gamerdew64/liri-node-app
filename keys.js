@@ -1,4 +1,4 @@
-console.log('this is loaded');
+console.log("\n=================================\n" + 'keys file has been loaded' + "\n=================================\n");
 
 var dotenv = require("dotenv").config();
 
