@@ -1,0 +1,4 @@
+my-tweets[object Object]function(artist) {
+    // returning the name of the artist
+    return artist.name;
+  }
