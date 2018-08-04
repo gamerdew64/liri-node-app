@@ -1,4 +1,8 @@
-my-tweets[object Object]function(artist) {
-    // returning the name of the artist
-    return artist.name;
-  }
+
+#######################################
+Movie Title: Sex and the Matrix
+#######################################
+
+#######################################
+Movie Title: Making 'The Shining'
+#######################################

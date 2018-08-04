@@ -51,6 +51,7 @@ var pullArtist = function(artist) {
   // returning the name of the artist
   return artist.name;
 };
+
 // This is the function that takes the song name (from user) and dumps the matching results to the console
 var pullSpotify = function(songName) {
   // Searching to find the song name or "track"
@@ -62,6 +63,20 @@ var pullSpotify = function(songName) {
         console.log('Error occurred: ' + err);
         return;
     }
+    if (!songName) {
+      console.log("#######################################\n" + "You did not enter the name of a song. Please see the following information regarding The Sign, by Ace of Base:" + "#######################################\n");
+      // Logging the name of the artist
+      console.log('Artist: ' + 'Ace of Base');
+      // Logging the song name
+      console.log('Song Name: ' + 'The Sign');
+      // Logging the preview of the song
+      console.log('Preview Song: ' + 'https://p.scdn.co/mp3-preview/4c463359f67dd3546db7294d236dd0ae991882ff?cid=6a090c0aa145423eb4e67f58c6067b50');
+      // Logging the name of the album
+      console.log('Album ' + 'The Sign (US Album) [Remastered]');
+      // Adding text to help divide the responses
+      console.log('\n##################################################\n');
+    }
+    else {
     // Following two lines were for testing output
     // console.log(data);
     // console.log(data.tracks.items[0]);
@@ -83,20 +98,8 @@ var pullSpotify = function(songName) {
       console.log('Album ' + songs[i].album.name);
       // Adding text to help divide the responses
       console.log('\n##################################################\n');
+      }
     } // Closing the for loop
-
-    if (!songs) {
-      // Logging the name of the artist
-      console.log('Artist: ' + 'Ace of Base');
-      // Logging the song name
-      console.log('Song Name: ' + 'The Sign');
-      // Logging the preview of the song
-      console.log('Preview Song: ' + 'https://p.scdn.co/mp3-preview/4c463359f67dd3546db7294d236dd0ae991882ff?cid=6a090c0aa145423eb4e67f58c6067b50');
-      // Logging the name of the album
-      console.log('Album ' + 'The Sign (US Album) [Remastered]');
-      // Adding text to help divide the responses
-      console.log('\n##################################################\n');
-    } // Closing the if conditional
   }); // Closing spotify.search()
 }; // Closing the pullSpotify function
 
@@ -123,6 +126,7 @@ var pullMovie = function(movieName){
       // console.log(noMovieProvided);
       request(noMovieProvided, function(error, response, body) {
         // If the request is successful
+        // console.log(body);
         if (!error && response.statusCode === 200) {
           // Logging the name of the movie to the console
           console.log("#######################################\n" + 'Title: ' + JSON.parse(body).Title);
@@ -135,7 +139,7 @@ var pullMovie = function(movieName){
           // Logging the IMDB rating of the movie to the console
           console.log('IMDB Rating: ' + JSON.parse(body).imdbRating);
           // Logging the number of rating votes of the movie from IMDB to the console
-          console.log('IMDB Rating Vote Number: ' + JSON.parse(body).imdbVotes);
+          console.log('Number of IMDB Rating Votes: ' + JSON.parse(body).imdbVotes);
           // Logging the country where the movie was released to the console
           console.log('Country: ' + JSON.parse(body).Country);
           // Logging the language of the movie to the console
@@ -146,6 +150,10 @@ var pullMovie = function(movieName){
           console.log("Actors: " + JSON.parse(body).Actors);
           // Logging the metacritic score of the movie to the console
           console.log('Metacritic Score: ' + JSON.parse(body).Metascore + "\n#######################################");
+          // The following two lines were originally supposed to be the Rotten tomatoes rating and URL, but they don't show up in the object, so I instead used the metacritic score and website above
+          // console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).Ratings[1].Source.Value);
+          // console.log('Rotten Tomatoes URL: ' + jsonData.tomatoURL + "\n#######################################");
+
         } // Closing the above if statement - (!error && response.statusCode === 200)
       }); // Closing the request when no movie is provided
     } // Closing the if statement that sees if a move name has been entered - (!movieName)
@@ -162,7 +170,7 @@ var pullMovie = function(movieName){
       // Logging the IMDB rating of the movie to the console
       console.log('IMDB Rating: ' + jsonData.imdbRating);
       // Logging the number of rating votes of the movie from IMDB to the console
-      console.log('IMDB Rating Vote Number: ' + jsonData.imdbVotes);
+      console.log('Number of IMDB Rating Votes: ' + jsonData.imdbVotes);
       // Logging the country where the movie was released to the console
       console.log('Country: ' + jsonData.Country);
       // Logging the language of the movie to the console
@@ -173,9 +181,24 @@ var pullMovie = function(movieName){
       console.log('Actors: ' + jsonData.Actors);
       // Logging the metacritic score of the movie to the console
       console.log('Metacritic Score: ' + jsonData.Metascore + "\n#######################################");
+
       // The following two lines were originally supposed to be the Rotten tomatoes rating and URL, but they don't show up in the object, so I instead used the metacritic score and website above
-      // console.log('Rotten Tomatoes Rating: ' + jsonData.tomatoRating);
+      // console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).Ratings[1].Source.Value);
       // console.log('Rotten Tomatoes URL: ' + jsonData.tomatoURL + "\n#######################################");
+
+      //Appending text section
+      fs.appendFile("log.txt", "#######################################\n" + "Movie Title: " + jsonData.Title + "\n#######################################\n", function(err) {
+
+        // If an error was experienced we will log it.
+        if (err) {
+          console.log(err);
+        }
+
+        // If no error is experienced, we'll log the phrase "Content Added" to our node console.
+        else {
+          console.log("The Movie Title has been Added to the Log File!");
+        }
+      }); // Closing append file section
     } // Closing else statement
   }); // Closing the first request (that pipes in the movie name enterd by the user)
 }; // Closing the pullMovie function
@@ -195,6 +218,7 @@ var runRandom = function(){
     } // Closing else if
   }); // Closing fs.readFile()
 }; // Closing runRandom function
+
 
 // This is a function that uses a switch-case statement instead of an if else statement to more efficiently direct which function runs (based off the text that the user inputs)
 var userChoice = function(caseData, functionData) {
