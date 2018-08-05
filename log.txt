@@ -1,8 +1,6 @@
-
 #######################################
-Movie Title: Sex and the Matrix
+User has added 20 songs in the console.
 #######################################
-
 #######################################
-Movie Title: Making 'The Shining'
+Some song(s) have been shown in the console.
 #######################################

@@ -28,7 +28,7 @@ var pullTweets = function() {
   };
   // Loading the data from the server using the .get() request
   twitterUser.get('statuses/user_timeline', parameters, function(error, tweets, response) {
-    console.log("Searching for Tweets...");
+    console.log("***********************\n" + "Searching for Tweets..." + "\n***********************");
     // If there are no errors, do the following:
     if (!error) {
       // The following console log line is for testing whether or not tweets show in the console.
@@ -58,7 +58,7 @@ var pullSpotify = function(songName) {
   spotify.search({ type: 'track', query: songName }, function(err, data) {
     // Console logging the song name input by the user for testing
     // console.log(songName);
-    console.log("Searching for Song...");
+    console.log("***********************\n" + "Searching for Songs..." + "\n***********************");
     if ( err ) {
         console.log('Error occurred: ' + err);
         return;
@@ -77,29 +77,44 @@ var pullSpotify = function(songName) {
       console.log('\n##################################################\n');
     }
     else {
-    // Following two lines were for testing output
-    // console.log(data);
-    // console.log(data.tracks.items[0]);
-    // Creating a new variable that that contains the data.tracks.items information
-    var songs = data.tracks.items;
-    // setting i to 0 and going through the length of the array, incrementing i each time
-    for(var i=0; i<songs.length; i++){
-      // This console log adjusts the numbering in the output. Instead of counting 0 to 19, it counts 1 to 20
-      console.log(i+1);
-      // This line involves me using a method that we have not yet discussed.
-      // The map() method creates a new array with the results of calling a provided function on every element in the calling array.
-      // Logging the name of the artist
-      console.log('Artist(s): ' + songs[i].artists.map(pullArtist));
-      // Logging the song name
-      console.log('Song Name: ' + songs[i].name);
-      // Logging the preview of the song
-      console.log('Preview Song: ' + songs[i].preview_url);
-      // Logging the name of the album
-      console.log('Album ' + songs[i].album.name);
-      // Adding text to help divide the responses
-      console.log('\n##################################################\n');
-      }
-    } // Closing the for loop
+      // Following two lines were for testing output
+      // console.log(data);
+      // console.log(data.tracks.items[0]);
+      // Creating a new variable that that contains the data.tracks.items information
+      var songs = data.tracks.items;
+      // setting i to 0 and going through the length of the array, incrementing i each time
+      for(var i=0; i<songs.length; i++){
+        // This console log adjusts the numbering in the output. Instead of counting 0 to 19, it counts 1 to 20
+        console.log(i+1);
+        // This line involves me using a method that we have not yet discussed.
+        // The map() method creates a new array with the results of calling a provided function on every element in the calling array.
+        // Logging the name of the artist
+        console.log('Artist(s): ' + songs[i].artists.map(pullArtist));
+        // Logging the song name
+        console.log('Song Name: ' + songs[i].name);
+        // Logging the preview of the song
+        console.log('Preview Song: ' + songs[i].preview_url);
+        // Logging the name of the album
+        console.log('Album ' + songs[i].album.name);
+        // Adding text to help divide the responses
+        console.log('\n##################################################\n');
+      } // Closing the for loop
+
+      //Appending text section
+      fs.appendFile("log.txt", "#######################################\n" + "Some song(s) have been shown in the console." + "\n#######################################\n", function(err) {
+
+        // If an error was experienced we will log it.
+        if (err) {
+          console.log(err);
+        }
+
+        // If no error is experienced, we'll log the movie title to the log.txt file and display a message in the console.
+        else {
+          console.log("--------------------------------------------------\n" + "The Songs have been Added to the Log File!" + "\n--------------------------------------------------");
+        }
+      }); // Closing append file section
+
+    } // Closing the else
   }); // Closing spotify.search()
 }; // Closing the pullSpotify function
 
@@ -107,7 +122,7 @@ var pullMovie = function(movieName){
   request('http://www.omdbapi.com/?t=' + movieName + '&y=&plot=short&r=json&apikey=trilogy', function (error, response, body) {
     // Console logging the move name input by the user for testing
     // console.log(movieName);
-    console.log("Searching for Movies...");
+    console.log("***********************\n" + "Searching for a Movie..." + "\n***********************");
     // Print the error if one occurred
     console.log('error:', error);
     // Print the response status code if a response was received
@@ -149,10 +164,11 @@ var pullMovie = function(movieName){
           // Logging the actors of the movie to the console
           console.log("Actors: " + JSON.parse(body).Actors);
           // Logging the metacritic score of the movie to the console
-          console.log('Metacritic Score: ' + JSON.parse(body).Metascore + "\n#######################################");
+          console.log('Metacritic Score: ' + JSON.parse(body).Metascore);
           // The following two lines were originally supposed to be the Rotten tomatoes rating and URL, but they don't show up in the object, so I instead used the metacritic score and website above
-          // console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).Ratings[1].Source.Value);
-          // console.log('Rotten Tomatoes URL: ' + jsonData.tomatoURL + "\n#######################################");
+          // Please see exampleObjectBreakdown.js in this directory for an example object that I brokedown looking for the tomato rating:
+          console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).Ratings[1].Source.Value);
+          console.log('Rotten Tomatoes URL: ' + jsonData.tomatoURL + "\n#######################################");
 
         } // Closing the above if statement - (!error && response.statusCode === 200)
       }); // Closing the request when no movie is provided
@@ -180,11 +196,12 @@ var pullMovie = function(movieName){
       // Logging the actors of the movie to the console
       console.log('Actors: ' + jsonData.Actors);
       // Logging the metacritic score of the movie to the console
-      console.log('Metacritic Score: ' + jsonData.Metascore + "\n#######################################");
+      console.log('Metacritic Score: ' + jsonData.Metascore);
 
       // The following two lines were originally supposed to be the Rotten tomatoes rating and URL, but they don't show up in the object, so I instead used the metacritic score and website above
-      // console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).Ratings[1].Source.Value);
-      // console.log('Rotten Tomatoes URL: ' + jsonData.tomatoURL + "\n#######################################");
+      // Please see exampleObjectBreakdown.js in this directory for an example object that I brokedown looking for the tomato rating:
+      console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).Ratings[1].Source.Value);
+      console.log('Rotten Tomatoes URL: ' + jsonData.tomatoURL + "\n#######################################");
 
       //Appending text section
       fs.appendFile("log.txt", "#######################################\n" + "Movie Title: " + jsonData.Title + "\n#######################################\n", function(err) {
@@ -194,9 +211,9 @@ var pullMovie = function(movieName){
           console.log(err);
         }
 
-        // If no error is experienced, we'll log the phrase "Content Added" to our node console.
+        // If no error is experienced, we'll log the movie title to the log.txt file and display a message in the console.
         else {
-          console.log("The Movie Title has been Added to the Log File!");
+          console.log("--------------------------------------------------\n" + "The Movie Title has been Added to the Log File!" + "\n--------------------------------------------------");
         }
       }); // Closing append file section
     } // Closing else statement
@@ -206,7 +223,7 @@ var pullMovie = function(movieName){
 var runRandom = function(){
   // Read the random text file
   fs.readFile('random.txt', 'utf8', function (err, data) {
-    console.log("Searching through random.txt...");
+    console.log("***********************\n" + "Searching through random.txt..." + "\n***********************");
     if (err) throw err;
     // The next line is done for testing purposes
     // console.log(data);
